@@ -10,14 +10,14 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:git-branchless.helloWorld"
+    "onCommand:git-branchless.move.exact"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "git-branchless.helloWorld",
-        "title": "Hello World"
+        "command": "git-branchless.move.exact",
+        "title": "Git branchless: Move exact"
       }
     ]
   },
@@ -30,16 +30,21 @@
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
-    "@types/vscode": "^1.71.0",
     "@types/glob": "^8.0.0",
+    "@types/lodash": "^4.14.186",
     "@types/mocha": "^10.0.0",
     "@types/node": "16.x",
+    "@types/vscode": "^1.71.0",
     "@typescript-eslint/eslint-plugin": "^5.38.1",
     "@typescript-eslint/parser": "^5.38.1",
+    "@vscode/test-electron": "^2.1.5",
     "eslint": "^8.24.0",
     "glob": "^8.0.3",
     "mocha": "^10.0.0",
-    "typescript": "^4.8.4",
-    "@vscode/test-electron": "^2.1.5"
+    "typescript": "^4.8.4"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "zod": "^3.19.1"
   }
 }
