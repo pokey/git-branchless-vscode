@@ -12,9 +12,11 @@ export function parseOrDisplayError<T>(
     const error = e as ZodError;
 
     const { formErrors, fieldErrors } = error.flatten();
+
     formErrors.forEach((message) => {
       vscode.window.showErrorMessage(message);
     });
+
     toPairs(fieldErrors).forEach(([key, messages]) => {
       if (messages == null) {
         return;
