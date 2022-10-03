@@ -1,6 +1,7 @@
 {
   "name": "git-branchless",
   "displayName": "Git branchless",
+  "publisher": "pokey",
   "description": "Unofficial VSCode support for git-branchless",
   "version": "0.0.1",
   "engines": {

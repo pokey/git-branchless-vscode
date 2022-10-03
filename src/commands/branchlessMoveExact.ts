@@ -1,6 +1,6 @@
 import { CommandDescription } from "../CommandDescription.types";
 
-export const branchlessMoveExact: CommandDescription = {
+const branchlessMoveExact: CommandDescription = {
   id: "move.exact",
   name: "Move exact",
   command: "move",
@@ -19,3 +19,5 @@ export const branchlessMoveExact: CommandDescription = {
     },
   ],
 };
+
+export default branchlessMoveExact;
