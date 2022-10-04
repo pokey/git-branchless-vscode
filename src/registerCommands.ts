@@ -8,57 +8,62 @@ let terminal: vscode.Terminal | undefined = undefined;
 
 function constructArgSchema(args: CommandArgDescription[]) {
   return z
-    .object({
-      args: constructArgListSchema(args).optional(),
-      noConfirmation: z.boolean().optional(),
-    })
-    .strict()
-    .optional();
-}
-
-function constructArgListSchema(args: CommandArgDescription[]) {
-  return z
     .object(
       Object.fromEntries(args.map(({ key }) => [key, z.string().optional()]))
     )
     .strict();
 }
 
+const CoreArgSchema = z
+  .object({
+    noConfirmation: z.boolean().optional(),
+  })
+  .strict();
+
 export function registerCommands(context: vscode.ExtensionContext) {
-  const disposables = commands.map(({ id, command, args: expectedArgs }) =>
-    vscode.commands.registerCommand(
-      `git-branchless.${id}`,
-      async (rawArg?: unknown) => {
-        const { args: actualArgs = {}, noConfirmation = false } =
-          parseOrDisplayError(constructArgSchema(expectedArgs), rawArg) ?? {};
+  const disposables = commands.map(
+    ({ id, command, noLog = false, args: expectedArgs }) =>
+      vscode.commands.registerCommand(
+        `git-branchless.${id}`,
+        async (rawArg?: unknown) => {
+          console.log(`rawArg: ${JSON.stringify(rawArg, undefined, 2)}`);
+          const extraArgSchema = constructArgSchema(expectedArgs);
+          const parsed =
+            parseOrDisplayError(CoreArgSchema.merge(extraArgSchema), rawArg) ??
+            {};
+          const { noConfirmation = false } = parsed as z.infer<
+            typeof CoreArgSchema
+          >;
+          const actualArgs: z.infer<typeof extraArgSchema> = parsed;
 
-        if (terminal == null) {
-          terminal = vscode.window.createTerminal({ isTransient: true });
-        }
-
-        const commandArgs = [];
-        for (const { key, flag, description } of expectedArgs) {
-          let value = actualArgs[key];
-          if (value == null) {
-            // FIXME: Use quick pick with commits or whatever depending on arg type
-            value = await vscode.window.showInputBox({ prompt: description });
-            if (value == null) {
-              // User cancelled
-              return;
-            }
+          if (terminal == null) {
+            terminal = vscode.window.createTerminal({ isTransient: true });
           }
-          commandArgs.push(`${flag} '${value}'`);
+
+          const commandArgs = [];
+          for (const { key, flag, description } of expectedArgs) {
+            let value = actualArgs[key];
+            if (value == null) {
+              // FIXME: Use quick pick with commits or whatever depending on arg type
+              value = await vscode.window.showInputBox({ prompt: description });
+              if (value == null) {
+                // User cancelled
+                return;
+              }
+            }
+            commandArgs.push(`${flag} '${value}'`);
+          }
+
+          const commandArgString = commandArgs.join(" ");
+
+          const showLogCommand = noLog ? "" : " && git-branchless smartlog";
+          terminal.sendText(
+            `git-branchless ${command} ${commandArgString}${showLogCommand}`,
+            noConfirmation
+          );
+          terminal.show();
         }
-
-        const commandArgString = commandArgs.join(" ");
-
-        terminal.sendText(
-          `git-branchless ${command} ${commandArgString} && git-branchless smartLog`,
-          noConfirmation
-        );
-        terminal.show();
-      }
-    )
+      )
   );
 
   context.subscriptions.push(...disposables);

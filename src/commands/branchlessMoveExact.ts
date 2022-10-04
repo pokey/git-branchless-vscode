@@ -4,6 +4,7 @@ const branchlessMoveExact: CommandDescription = {
   id: "move.exact",
   name: "Move exact",
   command: "move",
+  noLog: true,
   args: [
     {
       key: "exact",
