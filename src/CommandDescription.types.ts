@@ -11,6 +11,7 @@ export interface CommandDescription {
   id: string;
   name: string;
   command: string;
-  noLog?: boolean;
+  logAfter?: boolean;
   args: CommandArgDescription[];
+  noConfirmation?: boolean;
 }

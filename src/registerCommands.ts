@@ -22,26 +22,36 @@ const CoreArgSchema = z
 
 export function registerCommands(context: vscode.ExtensionContext) {
   const disposables = commands.map(
-    ({ id, command, noLog = false, args: expectedArgs }) =>
+    ({
+      id,
+      command,
+      logAfter = false,
+      args: expectedExtraArgs,
+      noConfirmation: defaultNoConfirmation,
+    }) =>
       vscode.commands.registerCommand(
         `git-branchless.${id}`,
         async (rawArg?: unknown) => {
-          const extraArgSchema = constructExtraArgSchema(expectedArgs);
+          const extraArgSchema = constructExtraArgSchema(expectedExtraArgs);
           const parsed =
-            parseOrDisplayError(CoreArgSchema.merge(extraArgSchema), rawArg) ??
-            {};
-          const { noConfirmation = false } = parsed as z.infer<
-            typeof CoreArgSchema
-          >;
-          const actualArgs: z.infer<typeof extraArgSchema> = parsed;
+            parseOrDisplayError(
+              CoreArgSchema.merge(extraArgSchema).optional(),
+              rawArg
+            ) ?? {};
+
+          const coreArgs: z.infer<typeof CoreArgSchema> = parsed;
+          const noConfirmation =
+            defaultNoConfirmation ?? coreArgs.noConfirmation ?? false;
+
+          const actualExtraArgs: z.infer<typeof extraArgSchema> = parsed;
 
           if (terminal == null) {
             terminal = vscode.window.createTerminal({ isTransient: true });
           }
 
           const commandArgs = [];
-          for (const { key, flag, description } of expectedArgs) {
-            let value = actualArgs[key];
+          for (const { key, flag, description } of expectedExtraArgs) {
+            let value = actualExtraArgs[key];
             if (value == null) {
               // FIXME: Use quick pick with commits or whatever depending on arg type
               value = await vscode.window.showInputBox({ prompt: description });
@@ -55,7 +65,7 @@ export function registerCommands(context: vscode.ExtensionContext) {
 
           const commandArgString = commandArgs.join(" ");
 
-          const showLogCommand = noLog ? "" : " && git-branchless smartlog";
+          const showLogCommand = logAfter ? " && git-branchless smartlog" : "";
           terminal.sendText(
             `git-branchless ${command} ${commandArgString}${showLogCommand}`,
             noConfirmation
