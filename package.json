@@ -16,7 +16,8 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:git-branchless.move.exact"
+    "onCommand:git-branchless.move.exact",
+    "onCommand:git-branchless.smartlog"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -24,6 +25,10 @@
       {
         "command": "git-branchless.move.exact",
         "title": "Git branchless: Move exact"
+      },
+      {
+        "command": "git-branchless.smartlog",
+        "title": "Git branchless: Smart log"
       }
     ]
   },

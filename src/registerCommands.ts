@@ -6,7 +6,7 @@ import { parseOrDisplayError } from "./parseOrDisplayError";
 
 let terminal: vscode.Terminal | undefined = undefined;
 
-function constructArgSchema(args: CommandArgDescription[]) {
+function constructExtraArgSchema(args: CommandArgDescription[]) {
   return z
     .object(
       Object.fromEntries(args.map(({ key }) => [key, z.string().optional()]))
@@ -26,8 +26,7 @@ export function registerCommands(context: vscode.ExtensionContext) {
       vscode.commands.registerCommand(
         `git-branchless.${id}`,
         async (rawArg?: unknown) => {
-          console.log(`rawArg: ${JSON.stringify(rawArg, undefined, 2)}`);
-          const extraArgSchema = constructArgSchema(expectedArgs);
+          const extraArgSchema = constructExtraArgSchema(expectedArgs);
           const parsed =
             parseOrDisplayError(CoreArgSchema.merge(extraArgSchema), rawArg) ??
             {};
