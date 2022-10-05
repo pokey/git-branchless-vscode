@@ -46,7 +46,10 @@ export function registerCommands(context: vscode.ExtensionContext) {
           const actualExtraArgs: z.infer<typeof extraArgSchema> = parsed;
 
           if (terminal == null) {
-            terminal = vscode.window.createTerminal({ isTransient: true });
+            terminal = vscode.window.createTerminal({
+              isTransient: true,
+              name: "Git branchless",
+            });
           }
 
           const commandArgs = [];
