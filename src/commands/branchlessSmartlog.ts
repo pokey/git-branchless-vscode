@@ -1,11 +1,10 @@
-import { CommandDescription } from "../CommandDescription.types";
+import BranchlessCommand from "../BranchlessCommand";
 
-const branchlessSmartlog: CommandDescription = {
-  id: "smartlog",
-  name: "Smart log",
-  command: "smartlog",
-  noConfirmation: true,
-  args: [],
-};
+const branchlessSmartlog = new BranchlessCommand(
+  "smartlog",
+  "smartlog",
+  {},
+  { noConfirmation: true }
+);
 
 export default branchlessSmartlog;

@@ -1,17 +1,11 @@
-type CommandArgType = "revset" | "commitish";
+import { z } from "zod";
 
-export interface CommandArgDescription {
-  key: string;
-  type: CommandArgType;
-  flag: string;
-  description: string;
+export interface ParamHandler<T> {
+  schema: z.ZodType<T>;
+  handleMissing(): Promise<T>;
 }
 
 export interface CommandDescription {
   id: string;
-  name: string;
-  command: string;
-  logAfter?: boolean;
-  args: CommandArgDescription[];
-  noConfirmation?: boolean;
+  run(rawArg?: unknown): void;
 }
