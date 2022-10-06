@@ -4,9 +4,9 @@ import {
   CommandParam,
   InferArgType,
   ParamMap,
-} from "../CommandDescription.types";
-import { UserCanceledError } from "../paramHandlers";
-import { parseOrDisplayError } from "../parseOrDisplayError";
+} from "./CommandDescription.types";
+import { UserCanceledError } from "./paramHandlers";
+import { parseOrDisplayError } from "./parseOrDisplayError";
 
 function constructParamSchema(params: Record<string, CommandParam<any>>) {
   return z

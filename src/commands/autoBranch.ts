@@ -1,8 +1,8 @@
 import { CommandDescription } from "../CommandDescription.types";
 import getTerminal from "../getTerminal";
 import { RevsetParam, WorkspaceFolderParam } from "../paramHandlers";
-import exec from "./exec";
-import getOutputChannel from "./getOutputChannel";
+import exec from "../exec";
+import getOutputChannel from "../getOutputChannel";
 
 const params = {
   revset: new RevsetParam(

@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { CommandDescription } from "./CommandDescription.types";
 import { commands } from "./commands/commands";
-import handleCommandArg from "./commands/handleCommandArg";
+import handleCommandArg from "./handleCommandArg";
 
 function registerCommand<T extends Record<string, any>>({
   id,
