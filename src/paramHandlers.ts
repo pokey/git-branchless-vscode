@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { z } from "zod";
-import { ParamHandler } from "./CommandDescription.types";
+import { CommandParam } from "./CommandDescription.types";
 
 export class UserCanceledError extends Error {
   constructor() {
@@ -8,7 +8,7 @@ export class UserCanceledError extends Error {
   }
 }
 
-export class RevsetHandler implements ParamHandler<string> {
+export class RevsetParam implements CommandParam<string> {
   schema = z.string();
 
   constructor(private message: string) {
@@ -26,7 +26,7 @@ export class RevsetHandler implements ParamHandler<string> {
   }
 }
 
-export class CommitishHandler implements ParamHandler<string> {
+export class CommitishParam implements CommandParam<string> {
   schema = z.string();
 
   constructor(private message: string) {
@@ -44,7 +44,7 @@ export class CommitishHandler implements ParamHandler<string> {
   }
 }
 
-export class DefaultHandler<T> implements ParamHandler<T> {
+export class DefaultValueParam<T> implements CommandParam<T> {
   constructor(public schema: z.ZodType<T>, public defaultValue: T) {
     this.handleMissing = this.handleMissing.bind(this);
   }
