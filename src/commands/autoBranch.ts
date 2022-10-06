@@ -19,7 +19,7 @@ const autoBranch: CommandDescription<typeof params> = {
     console.log(`workspaceFolder: ${workspaceFolder.uri.toString()}`);
 
     const { stdout, stderr } = await exec(
-      "git-branchless query -r '$query - branches()'",
+      `git-branchless query -r '${revset} - branches()'`,
       {
         cwd: workspaceFolder.uri.fsPath,
       }
