@@ -1,20 +1,19 @@
 import { z } from "zod";
 
-export interface CommandParam<T> {
+export interface CommandParam<T, U = T> {
   schema: z.ZodType<T>;
-  handleMissing(): Promise<T>;
+  transformer?(raw: T): Promise<U>;
+  handleMissing(): Promise<U>;
 }
 
-type ParamMap<T extends Record<string, any>> = {
-  [P in keyof T]: CommandParam<T[P]>;
-};
+export type ParamMap = Record<string, CommandParam<any, any>>;
 
 export type InferArgType<T> = {
-  [P in keyof T]: T[P] extends CommandParam<infer V> ? V : never;
+  [P in keyof T]: T[P] extends CommandParam<any, infer V> ? V : never;
 };
 
-export interface CommandDescription<T extends Record<string, any>> {
+export interface CommandDescription<T extends ParamMap> {
   id: string;
-  params: ParamMap<T>;
-  run(arg: T): Promise<unknown>;
+  params: T;
+  run(arg: InferArgType<T>): Promise<unknown>;
 }

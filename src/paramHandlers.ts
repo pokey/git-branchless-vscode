@@ -53,3 +53,60 @@ export class DefaultValueParam<T> implements CommandParam<T> {
     return this.defaultValue;
   }
 }
+
+export class WorkspaceFolderParam
+  implements CommandParam<string, vscode.WorkspaceFolder>
+{
+  schema = z.string();
+
+  constructor() {
+    this.handleMissing = this.handleMissing.bind(this);
+    this.transformer = this.transformer.bind(this);
+  }
+
+  async transformer(raw: string): Promise<vscode.WorkspaceFolder> {
+    const { workspaceFolders } = vscode.workspace;
+
+    if (workspaceFolders == null) {
+      throw new Error("Must have a workspace.");
+    }
+
+    if (raw === "auto") {
+      if (workspaceFolders == null || workspaceFolders.length !== 1) {
+        throw new Error(
+          "Only single-folder workspaces currently supported with 'auto' for now."
+        );
+      }
+
+      return workspaceFolders[0];
+    }
+
+    const ret = workspaceFolders.find(({ name }) => raw === name);
+
+    if (ret == null) {
+      throw new Error(`Couldn't find workspace ${raw}`);
+    }
+
+    return ret;
+  }
+
+  async handleMissing(): Promise<vscode.WorkspaceFolder> {
+    const { workspaceFolders } = vscode.workspace;
+
+    if (workspaceFolders == null) {
+      throw new Error("Must have a workspace.");
+    }
+
+    if (workspaceFolders.length === 1) {
+      return workspaceFolders[0];
+    }
+
+    const value = await vscode.window.showWorkspaceFolderPick();
+
+    if (value == null) {
+      throw new UserCanceledError();
+    }
+
+    return value;
+  }
+}

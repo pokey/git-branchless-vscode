@@ -1,6 +1,10 @@
 import { toPairs } from "lodash";
 import { z } from "zod";
-import { CommandParam } from "../CommandDescription.types";
+import {
+  CommandParam,
+  InferArgType,
+  ParamMap,
+} from "../CommandDescription.types";
 import { UserCanceledError } from "../paramHandlers";
 import { parseOrDisplayError } from "../parseOrDisplayError";
 
@@ -15,22 +19,24 @@ function constructParamSchema(params: Record<string, CommandParam<any>>) {
     .optional();
 }
 
-export type ParamMap<T extends Record<string, any>> = {
-  [P in keyof T]: CommandParam<T[P]>;
-};
-
-export default async function handleCommandArg<T extends Record<string, any>>(
-  params: ParamMap<T>,
+export default async function handleCommandArg<T extends ParamMap>(
+  params: T,
   rawArg: unknown
-): Promise<T | undefined> {
+): Promise<InferArgType<T> | undefined> {
   const schema = constructParamSchema(params);
   const parsed = parseOrDisplayError(schema, rawArg) ?? {};
 
-  const ret: Partial<T> = {};
+  const ret: Partial<InferArgType<T>> = {};
 
   try {
-    for (const [key, { handleMissing }] of toPairs(params)) {
-      ret[key as keyof T] = parsed[key] ?? (await handleMissing());
+    for (const [key, { handleMissing, transformer }] of toPairs(params)) {
+      const parsedValue = parsed[key];
+      ret[key as keyof T] =
+        parsedValue == null
+          ? await handleMissing()
+          : transformer == null
+          ? parsedValue
+          : await transformer(parsedValue);
     }
   } catch (err) {
     if (err instanceof UserCanceledError) {
@@ -40,5 +46,5 @@ export default async function handleCommandArg<T extends Record<string, any>>(
     throw err;
   }
 
-  return ret as T;
+  return ret as InferArgType<T>;
 }

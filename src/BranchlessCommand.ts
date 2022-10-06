@@ -1,9 +1,12 @@
 import { mapValues, toPairs } from "lodash";
-import * as vscode from "vscode";
 import { z } from "zod";
-import { CommandDescription, CommandParam } from "./CommandDescription.types";
-import { ParamMap } from "./commands/handleCommandArg";
-import { DefaultValueParam } from "./paramHandlers";
+import {
+  CommandDescription,
+  CommandParam,
+  InferArgType,
+} from "./CommandDescription.types";
+import getTerminal from "./getTerminal";
+import { DefaultValueParam, WorkspaceFolderParam } from "./paramHandlers";
 
 interface BranchlessCommandParam {
   paramHandler: CommandParam<any>;
@@ -15,17 +18,18 @@ interface Options {
   noConfirmation?: boolean;
 }
 
-interface CoreArgs {
-  noConfirmation: boolean;
+interface CoreParams {
+  noConfirmation: CommandParam<boolean>;
+  workspaceFolder: WorkspaceFolderParam;
 }
-type BranchlessArgs = Record<string, any>;
+type BranchlessParams = Record<string, CommandParam<any>>;
 
-type ArgType = CoreArgs & BranchlessArgs;
-type ParamType = ParamMap<ArgType>;
+type ParamType = CoreParams & BranchlessParams;
+type ArgType = InferArgType<ParamType>;
 
-let terminal: vscode.Terminal | undefined = undefined;
-
-export default class BranchlessCommand implements CommandDescription<ArgType> {
+export default class BranchlessCommand
+  implements CommandDescription<ParamType>
+{
   public params: ParamType;
 
   constructor(
@@ -38,10 +42,11 @@ export default class BranchlessCommand implements CommandDescription<ArgType> {
 
     const { noConfirmation = false } = this.options;
 
-    const coreParams: ParamMap<CoreArgs> = {
+    const coreParams: CoreParams = {
       noConfirmation: new DefaultValueParam(z.boolean(), noConfirmation),
+      workspaceFolder: new WorkspaceFolderParam(),
     };
-    const branchlessParamMap: ParamMap<BranchlessArgs> = mapValues(
+    const branchlessParamMap: BranchlessParams = mapValues(
       this.branchlessParams,
       ({ paramHandler }) => paramHandler
     );
@@ -52,27 +57,20 @@ export default class BranchlessCommand implements CommandDescription<ArgType> {
     };
   }
 
-  async run({ noConfirmation, ...commandArgs }: ArgType) {
+  async run({ noConfirmation, workspaceFolder, ...commandArgs }: ArgType) {
+    const terminal = getTerminal(workspaceFolder);
+
     const commandArgString = toPairs(this.branchlessParams)
       .map(([key, { flag }]) => `${flag} '${commandArgs[key]}'`)
       .join(" ");
-
-    if (terminal == null) {
-      terminal = vscode.window.createTerminal({
-        isTransient: true,
-        name: "Git branchless",
-      });
-    }
 
     const showLogCommand = this.options.logAfter
       ? " && git-branchless smartlog"
       : "";
 
-    terminal.sendText(
+    terminal.runCommand(
       `git-branchless ${this.command} ${commandArgString}${showLogCommand}`,
-      noConfirmation
+      !noConfirmation
     );
-
-    terminal.show();
   }
 }
