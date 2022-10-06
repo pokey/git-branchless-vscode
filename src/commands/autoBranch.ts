@@ -15,9 +15,6 @@ const autoBranch: CommandDescription<typeof params> = {
   id: "custom.autoBranch",
   params,
   async run({ revset, workspaceFolder }) {
-    console.log(`revset: ${revset}`);
-    console.log(`workspaceFolder: ${workspaceFolder.uri.toString()}`);
-
     const { stdout, stderr } = await exec(
       `git-branchless query -r '${revset} - branches()'`,
       {
