@@ -1,8 +1,8 @@
 import { CommandDescription } from "../CommandDescription.types";
+import getCommitInfo from "../getCommitInfo";
 import getTerminal from "../getTerminal";
 import { RevsetParam, WorkspaceFolderParam } from "../paramHandlers";
-import exec from "../exec";
-import getOutputChannel from "../getOutputChannel";
+import runBranchlessQuery from "../runBranchlessQuery";
 
 const params = {
   revset: new RevsetParam(
@@ -15,26 +15,12 @@ const autoBranch: CommandDescription<typeof params> = {
   id: "custom.autoBranch",
   params,
   async run({ revset, workspaceFolder }) {
-    const { stdout, stderr } = await exec(
-      `git-branchless query -r '${revset} - branches()'`,
-      {
-        cwd: workspaceFolder.uri.fsPath,
-      }
-    );
+    const commits = await runBranchlessQuery(`(${revset})`, workspaceFolder);
+    const commitInfos = await getCommitInfo(commits, workspaceFolder);
 
-    if (stderr && stderr.length > 0) {
-      getOutputChannel().appendLine(stderr);
-      getOutputChannel().show(true);
-    }
+    console.log(`commitInfos: ${JSON.stringify(commitInfos, undefined, 2)}`);
+
     const terminal = getTerminal(workspaceFolder);
-
-    const lines = stdout.split(/\r{0,1}\n/);
-    for (const line of lines) {
-      if (line.length === 0) {
-        continue;
-      }
-      terminal.runCommand(`echo Commit ${line}`, false);
-    }
   },
 };
 

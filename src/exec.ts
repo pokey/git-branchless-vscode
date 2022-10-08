@@ -1,15 +1,42 @@
 import * as cp from "child_process";
+import getOutputChannel from "./getOutputChannel";
 
+/**
+ * Runs a process using `spawn` and returns its output.  If there is any stderr
+ * output, it shows it in a VSCode output channel.  Throws an exception on
+ * nonzero exit code.
+ *
+ * Based on https://stackoverflow.com/a/32872753/
+ *
+ * @param command The command to run.
+ * @param args List of string arguments.
+ * @param options Options for spawning the process
+ * @returns The output from the command
+ */
 export default function exec(
   command: string,
-  options: cp.ExecOptions
-): Promise<{ stdout: string; stderr: string }> {
-  return new Promise<{ stdout: string; stderr: string }>((resolve, reject) => {
-    cp.exec(command, options, (error, stdout, stderr) => {
-      if (error) {
-        reject({ error, stdout, stderr });
+  args: string[],
+  options: cp.SpawnOptionsWithoutStdio
+): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    const child = cp.spawn(command, args, options);
+
+    var scriptOutput = "";
+    child.stdout.setEncoding("utf8").on("data", (data) => {
+      scriptOutput += data.toString();
+    });
+
+    child.stderr.setEncoding("utf8").on("data", (data) => {
+      getOutputChannel().append(data.toString());
+      getOutputChannel().show(true);
+    });
+
+    child.on("close", function (code) {
+      if (code === 0) {
+        resolve(scriptOutput);
+      } else {
+        reject(`Command ${command} failed with exit code ${code}`);
       }
-      resolve({ stdout, stderr });
     });
   });
 }
