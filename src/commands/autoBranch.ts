@@ -15,7 +15,10 @@ const autoBranch: CommandDescription<typeof params> = {
   id: "custom.autoBranch",
   params,
   async run({ revset, workspaceFolder }) {
-    const commits = await runBranchlessQuery(`(${revset})`, workspaceFolder);
+    const commits = await runBranchlessQuery(
+      `(${revset}) - branches()`,
+      workspaceFolder
+    );
     const commitInfos = await getCommitInfo(commits, workspaceFolder);
 
     console.log(`commitInfos: ${JSON.stringify(commitInfos, undefined, 2)}`);
