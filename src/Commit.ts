@@ -29,6 +29,9 @@ export default class Commit {
     return this.info.refNames;
   }
 
+  /**
+   * `true` if this commit is currently checked out
+   */
   get isHead(): boolean {
     return this.info.refNames.includes("HEAD");
   }
