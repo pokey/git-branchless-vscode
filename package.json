@@ -35,7 +35,17 @@
         "command": "git-branchless.custom.autoBranch",
         "title": "Git branchless: Automatically create branch based on commit name"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Git branchless",
+      "properties": {
+        "git-branchless.branchPrefix": {
+          "type": "string",
+          "default": "",
+          "description": "String to prefix when creating new branches"
+        }
+      }
+    }
   },
   "scripts": {
     "compile": "webpack",
@@ -72,6 +82,7 @@
   },
   "dependencies": {
     "lodash": "^4.17.21",
+    "slugify": "^1.6.5",
     "validator": "^13.7.0",
     "zod": "^3.19.1"
   }

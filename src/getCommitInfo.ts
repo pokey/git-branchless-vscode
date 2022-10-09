@@ -1,16 +1,9 @@
-import { keys, toPairs, zip } from "lodash";
+import { toPairs, zip } from "lodash";
 import { WorkspaceFolder } from "vscode";
 import { gitCmd } from "./branchlessCmd";
+import Commit, { CommitInfo } from "./Commit";
 import exec from "./exec";
 import { getCleanLines } from "./getCleanLines";
-
-interface CommitInfo {
-  hash: string;
-  authorName: string;
-  date: Date;
-  subject: string;
-  refNames: string[];
-}
 
 const fields: Record<keyof CommitInfo, string> = {
   hash: "%H",
@@ -23,14 +16,14 @@ const fields: Record<keyof CommitInfo, string> = {
 export default async function getCommitInfo(
   commits: string[],
   workspaceFolder: WorkspaceFolder
-): Promise<CommitInfo[]> {
+): Promise<Commit[]> {
   const [fieldKeys, fieldFormatters] = zip(...toPairs(fields));
 
   const formatterString = fieldFormatters.join("%x00");
 
   const output = await exec(
     gitCmd(),
-    ["show", `--format=${formatterString}`, ...commits],
+    ["show", "--no-patch", `--format=${formatterString}`, ...commits],
     {
       cwd: workspaceFolder.uri.fsPath,
     }
@@ -45,6 +38,6 @@ export default async function getCommitInfo(
 
     obj.date = new Date(obj.date);
 
-    return obj;
+    return new Commit(obj);
   });
 }

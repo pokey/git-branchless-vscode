@@ -1,8 +1,11 @@
+import slugify from "slugify";
+import { workspace } from "vscode";
+import { gitCmd } from "../branchlessCmd";
 import { CommandDescription } from "../CommandDescription.types";
-import getCommitInfo from "../getCommitInfo";
-import getTerminal from "../getTerminal";
+import exec from "../exec";
 import { RevsetParam, WorkspaceFolderParam } from "../paramHandlers";
 import runBranchlessQuery from "../runBranchlessQuery";
+import showLog from "../showLog";
 
 const params = {
   revset: new RevsetParam(
@@ -19,11 +22,28 @@ const autoBranch: CommandDescription<typeof params> = {
       `(${revset}) - branches()`,
       workspaceFolder
     );
-    const commitInfos = await getCommitInfo(commits, workspaceFolder);
 
-    console.log(`commitInfos: ${JSON.stringify(commitInfos, undefined, 2)}`);
+    const prefix =
+      workspace
+        .getConfiguration("git-branchless")
+        .get<string>("branchPrefix") ?? "";
 
-    const terminal = getTerminal(workspaceFolder);
+    for (const { hash, subject, isHead } of commits) {
+      const branchName =
+        prefix + slugify(subject, { lower: true, strict: true });
+
+      if (isHead) {
+        await exec(gitCmd(), ["checkout", `-b`, branchName, hash], {
+          cwd: workspaceFolder.uri.fsPath,
+        });
+      } else {
+        await exec(gitCmd(), ["branch", branchName, hash], {
+          cwd: workspaceFolder.uri.fsPath,
+        });
+      }
+    }
+
+    showLog(workspaceFolder);
   },
 };
 
