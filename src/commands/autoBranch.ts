@@ -32,12 +32,12 @@ const autoBranch: CommandDescription<typeof params> = {
       const branchName =
         prefix + slugify(subject, { lower: true, strict: true });
 
+      await exec(gitCmd(), ["branch", branchName, hash], {
+        cwd: workspaceFolder.uri.fsPath,
+      });
+
       if (isHead) {
-        await exec(gitCmd(), ["checkout", `-b`, branchName, hash], {
-          cwd: workspaceFolder.uri.fsPath,
-        });
-      } else {
-        await exec(gitCmd(), ["branch", branchName, hash], {
+        await exec(gitCmd(), ["switch", branchName], {
           cwd: workspaceFolder.uri.fsPath,
         });
       }
