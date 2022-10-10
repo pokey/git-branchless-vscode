@@ -11,7 +11,10 @@ export default class RevsetParam implements CommandParam<string> {
   }
 
   async handleMissing(): Promise<string> {
-    const value = await vscode.window.showInputBox({ prompt: this.message });
+    const value = await vscode.window.showInputBox({
+      prompt: this.message,
+      value: ".",
+    });
 
     if (value == null) {
       throw new UserCanceledError();
