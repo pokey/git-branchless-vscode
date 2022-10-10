@@ -21,14 +21,21 @@ export default function exec(
   return new Promise<string>((resolve, reject) => {
     const child = cp.spawn(command, args, options);
 
+    let outputChannelPrepared = false;
+
     var scriptOutput = "";
     child.stdout.setEncoding("utf8").on("data", (data) => {
       scriptOutput += data.toString();
     });
 
     child.stderr.setEncoding("utf8").on("data", (data) => {
+      if (!outputChannelPrepared) {
+        outputChannelPrepared = true;
+        getOutputChannel().append(`\n➜ ${command} ${args.join(" ")}\n`);
+        getOutputChannel().show(true);
+      }
+
       getOutputChannel().append(data.toString());
-      getOutputChannel().show(true);
     });
 
     child.on("close", function (code) {

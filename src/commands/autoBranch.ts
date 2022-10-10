@@ -1,12 +1,8 @@
 import slugify from "slugify";
 import { workspace } from "vscode";
-import { gitCmd } from "../branchlessCmd";
 import { CommandDescription } from "../CommandDescription.types";
-import exec from "../exec";
-import { WorkspaceFolderParam } from "../paramHandlers";
-import { RevsetParam } from "../paramHandlers";
-import runBranchlessQuery from "../runBranchlessQuery";
-import showLog from "../showLog";
+import Git from "../Git";
+import { RevsetParam, WorkspaceFolderParam } from "../paramHandlers";
 
 const params = {
   revset: new RevsetParam(
@@ -19,32 +15,27 @@ const autoBranch: CommandDescription<typeof params> = {
   id: "custom.autoBranch",
   params,
   async run({ revset, workspaceFolder }) {
-    const commits = await runBranchlessQuery(
-      `(${revset}) - branches()`,
-      workspaceFolder
-    );
+    const git = new Git(workspaceFolder);
 
     const prefix =
       workspace
         .getConfiguration("git-branchless")
         .get<string>("branchPrefix") ?? "";
 
+    const commits = await git.query(`(${revset}) - branches()`);
+
     for (const { hash, subject, isHead } of commits) {
       const branchName =
         prefix + slugify(subject, { lower: true, strict: true });
 
-      await exec(gitCmd(), ["branch", branchName, hash], {
-        cwd: workspaceFolder.uri.fsPath,
-      });
+      await git.branch(branchName, hash);
 
       if (isHead) {
-        await exec(gitCmd(), ["switch", branchName], {
-          cwd: workspaceFolder.uri.fsPath,
-        });
+        await git.switch(branchName);
       }
     }
 
-    await showLog(workspaceFolder);
+    await git.showLog();
   },
 };
 

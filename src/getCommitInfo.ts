@@ -17,6 +17,13 @@ export default async function getCommitInfo(
   commits: string[],
   workspaceFolder: WorkspaceFolder
 ): Promise<Commit[]> {
+  // This case prevents us from passing empty list of commits to git, which
+  // would cause it to report info about head commit, which is definitely not
+  // what we want!
+  if (commits.length === 0) {
+    return [];
+  }
+
   const [fieldKeys, fieldFormatters] = zip(...toPairs(fields));
 
   const formatterString = fieldFormatters.join("%x00");
