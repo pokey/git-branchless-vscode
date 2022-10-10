@@ -3,7 +3,8 @@ import { workspace } from "vscode";
 import { gitCmd } from "../branchlessCmd";
 import { CommandDescription } from "../CommandDescription.types";
 import exec from "../exec";
-import { RevsetParam, WorkspaceFolderParam } from "../paramHandlers";
+import { WorkspaceFolderParam } from "../paramHandlers";
+import { RevsetParam } from "../paramHandlers";
 import runBranchlessQuery from "../runBranchlessQuery";
 import showLog from "../showLog";
 
@@ -43,7 +44,7 @@ const autoBranch: CommandDescription<typeof params> = {
       }
     }
 
-    showLog(workspaceFolder);
+    await showLog(workspaceFolder);
   },
 };
 

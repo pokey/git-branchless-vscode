@@ -6,7 +6,8 @@ import {
   InferArgType,
 } from "./CommandDescription.types";
 import getTerminal from "./getTerminal";
-import { DefaultValueParam, WorkspaceFolderParam } from "./paramHandlers";
+import { WorkspaceFolderParam } from "./paramHandlers";
+import { DefaultValueParam } from "./paramHandlers";
 
 interface BranchlessCommandParam {
   paramHandler: CommandParam<any>;

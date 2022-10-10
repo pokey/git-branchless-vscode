@@ -1,4 +1,5 @@
-import { CommitishParam, RevsetParam } from "../paramHandlers";
+import { CommitishParam } from "../paramHandlers";
+import { RevsetParam } from "../paramHandlers";
 import BranchlessCommand from "../BranchlessCommand";
 
 const branchlessMoveExact = new BranchlessCommand("move.exact", "move", {
