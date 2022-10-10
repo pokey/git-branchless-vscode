@@ -32,7 +32,6 @@ export default function exec(
       if (!outputChannelPrepared) {
         outputChannelPrepared = true;
         getOutputChannel().append(`\n➜ ${command} ${args.join(" ")}\n`);
-        getOutputChannel().show(true);
       }
 
       getOutputChannel().append(data.toString());
@@ -42,6 +41,7 @@ export default function exec(
       if (code === 0) {
         resolve(scriptOutput);
       } else {
+        getOutputChannel().show(true);
         reject(`Command ${command} failed with exit code ${code}`);
       }
     });

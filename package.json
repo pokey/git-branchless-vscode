@@ -19,7 +19,8 @@
     "onCommand:git-branchless.move.exact",
     "onCommand:git-branchless.smartlog",
     "onCommand:git-branchless.custom.autoBranch",
-    "onCommand:git-branchless.custom.moveBranch"
+    "onCommand:git-branchless.custom.moveBranch",
+    "onCommand:git-branchless.custom.detachHead"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -39,6 +40,10 @@
       {
         "command": "git-branchless.custom.moveBranch",
         "title": "Git branchless: Move a branch pointer to a different commit"
+      },
+      {
+        "command": "git-branchless.custom.detachHead",
+        "title": "Git branchless: Detach head"
       }
     ],
     "configuration": {
