@@ -1,5 +1,5 @@
 import { CommandDescription } from "../CommandDescription.types";
-import Git from "../git";
+import Git from "../Git";
 import processBranchParam from "../processBranchParam";
 import {
   BranchParam,
