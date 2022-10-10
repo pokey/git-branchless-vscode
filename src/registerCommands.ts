@@ -11,14 +11,19 @@ function registerCommand<T extends Record<string, any>>({
   return vscode.commands.registerCommand(
     `git-branchless.${id}`,
     async (rawArg?: unknown) => {
-      const arg = await handleCommandArg(params, rawArg);
+      try {
+        const arg = await handleCommandArg(params, rawArg);
 
-      if (arg == null) {
-        // User canceled
-        return;
+        if (arg == null) {
+          // User canceled
+          return;
+        }
+
+        return await run(arg);
+      } catch (err) {
+        vscode.window.showErrorMessage((err as Error).message);
+        throw err;
       }
-
-      return await run(arg);
     }
   );
 }

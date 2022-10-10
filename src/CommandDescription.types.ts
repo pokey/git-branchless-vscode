@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export interface CommandParam<T, U = T> {
   schema: z.ZodType<T>;
-  transformer?(raw: T): Promise<U>;
+  transform?(raw: T): Promise<U>;
   handleMissing(): Promise<U>;
 }
 

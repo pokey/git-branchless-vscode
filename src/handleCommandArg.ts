@@ -29,7 +29,7 @@ export default async function handleCommandArg<T extends ParamMap>(
   const ret: Partial<InferArgType<T>> = {};
 
   try {
-    for (const [key, { handleMissing, transformer }] of toPairs(params)) {
+    for (const [key, { handleMissing, transform: transformer }] of toPairs(params)) {
       const parsedValue = parsed[key];
       ret[key as keyof T] =
         parsedValue == null

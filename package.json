@@ -18,7 +18,8 @@
   "activationEvents": [
     "onCommand:git-branchless.move.exact",
     "onCommand:git-branchless.smartlog",
-    "onCommand:git-branchless.custom.autoBranch"
+    "onCommand:git-branchless.custom.autoBranch",
+    "onCommand:git-branchless.custom.moveBranch"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -34,6 +35,10 @@
       {
         "command": "git-branchless.custom.autoBranch",
         "title": "Git branchless: Automatically create branch based on commit name"
+      },
+      {
+        "command": "git-branchless.custom.moveBranch",
+        "title": "Git branchless: Move a branch pointer to a different commit"
       }
     ],
     "configuration": {

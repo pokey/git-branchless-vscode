@@ -10,10 +10,10 @@ export default class WorkspaceFolderParam
 
   constructor() {
     this.handleMissing = this.handleMissing.bind(this);
-    this.transformer = this.transformer.bind(this);
+    this.transform = this.transform.bind(this);
   }
 
-  async transformer(raw: string): Promise<vscode.WorkspaceFolder> {
+  async transform(raw: string): Promise<vscode.WorkspaceFolder> {
     const { workspaceFolders } = vscode.workspace;
 
     if (workspaceFolders == null) {

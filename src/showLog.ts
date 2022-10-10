@@ -4,7 +4,7 @@ import getTerminal from "./getTerminal";
 import exec from "./exec";
 import getOutputChannel from "./getOutputChannel";
 
-export default function showLog(workspaceFolder: WorkspaceFolder) {
+export default async function showLog(workspaceFolder: WorkspaceFolder) {
   const terminal = getTerminal(workspaceFolder);
   terminal.runCommand(`${branchlessCmd()} smartlog`, false);
 }
