@@ -18,6 +18,7 @@
   "activationEvents": [
     "onCommand:git-branchless.move.exact",
     "onCommand:git-branchless.smartlog",
+    "onCommand:git-branchless.hide",
     "onCommand:git-branchless.custom.autoBranch",
     "onCommand:git-branchless.custom.moveBranch",
     "onCommand:git-branchless.custom.detachHead"
@@ -32,6 +33,10 @@
       {
         "command": "git-branchless.smartlog",
         "title": "Git branchless: Smart log"
+      },
+      {
+        "command": "git-branchless.hide",
+        "title": "Git branchless: Hide"
       },
       {
         "command": "git-branchless.custom.autoBranch",

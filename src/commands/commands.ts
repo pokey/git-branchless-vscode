@@ -1,5 +1,6 @@
 import { CommandDescription } from "../CommandDescription.types";
 import autoBranch from "./autoBranch";
+import branchlessHide from "./branchlessHide";
 import branchlessMoveExact from "./branchlessMoveExact";
 import branchlessSmartlog from "./branchlessSmartlog";
 import detachHead from "./detachHead";
@@ -11,4 +12,5 @@ export const commands: CommandDescription<any>[] = [
   autoBranch,
   moveBranch,
   detachHead,
+  branchlessHide,
 ];
