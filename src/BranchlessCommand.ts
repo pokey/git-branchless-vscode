@@ -72,7 +72,7 @@ export default class BranchlessCommand
 
     const showLogCommand = logAfter ? " && git-branchless smartlog" : "";
 
-    terminal.runCommand(
+    await terminal.runCommand(
       `git-branchless ${this.command} ${commandArgString}${showLogCommand}`,
       !noConfirmation
     );

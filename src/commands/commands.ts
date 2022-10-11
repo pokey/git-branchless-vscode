@@ -5,6 +5,7 @@ import branchlessMoveExact from "./branchlessMoveExact";
 import branchlessSmartlog from "./branchlessSmartlog";
 import detachHead from "./detachHead";
 import moveBranch from "./moveBranch";
+import switchToCommit from "./switchToCommit";
 
 export const commands: CommandDescription<any>[] = [
   branchlessMoveExact,
@@ -13,4 +14,5 @@ export const commands: CommandDescription<any>[] = [
   moveBranch,
   detachHead,
   branchlessHide,
+  switchToCommit,
 ];

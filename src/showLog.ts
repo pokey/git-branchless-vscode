@@ -6,7 +6,7 @@ import getOutputChannel from "./getOutputChannel";
 
 export default async function showLog(workspaceFolder: WorkspaceFolder) {
   const terminal = getTerminal(workspaceFolder);
-  terminal.runCommand(`${branchlessCmd()} smartlog`, false);
+  await terminal.runCommand(`${branchlessCmd()} smartlog`, false);
 }
 
 export async function showLogInOutputChannel(workspaceFolder: WorkspaceFolder) {

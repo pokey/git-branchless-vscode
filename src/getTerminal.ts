@@ -5,7 +5,15 @@ const terminals: Record<string, Terminal> = {};
 class Terminal {
   constructor(private terminal: vscode.Terminal) {}
 
-  runCommand(command: string, requireConfirmation: boolean) {
+  /**
+   * Run the command in the terminal.
+   *
+   * FIXME: The promise resolves immediately, rather than waiting for command
+   * to complete.  Should probably switch to using tasks.
+   * @param command The command to run
+   * @param requireConfirmation Whether to ask user for confirmation before running the command
+   */
+  async runCommand(command: string, requireConfirmation: boolean) {
     this.terminal.sendText(command, !requireConfirmation);
     this.terminal.show();
   }

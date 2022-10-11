@@ -1,6 +1,7 @@
 import { WorkspaceFolder } from "vscode";
 import { branchlessCmd, gitCmd } from "./branchlessCmd";
 import exec from "./exec";
+import getTerminal from "./getTerminal";
 import runBranchlessQuery from "./runBranchlessQuery";
 import showLog from "./showLog";
 
@@ -53,6 +54,13 @@ export default class Git {
 
   detachHead() {
     return this.runGitCmd("checkout", "--detach", "head");
+  }
+
+  async branchlessSwitch(destination: string) {
+    await getTerminal(this.workspaceFolder).runCommand(
+      `${branchlessCmd()} switch '${destination}'`,
+      false
+    );
   }
 
   async getCurrentBranch() {

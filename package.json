@@ -21,7 +21,8 @@
     "onCommand:git-branchless.hide",
     "onCommand:git-branchless.custom.autoBranch",
     "onCommand:git-branchless.custom.moveBranch",
-    "onCommand:git-branchless.custom.detachHead"
+    "onCommand:git-branchless.custom.detachHead",
+    "onCommand:git-branchless.custom.switchToCommit"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -49,6 +50,10 @@
       {
         "command": "git-branchless.custom.detachHead",
         "title": "Git branchless: Detach head"
+      },
+      {
+        "command": "git-branchless.custom.switchToCommit",
+        "title": "Git branchless: Checkout a commit"
       }
     ],
     "configuration": {
