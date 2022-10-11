@@ -87,7 +87,7 @@ function getArgString<T>(param: BranchlessCommandParam<T>, value: T) {
   } = param;
 
   if (isArg) {
-    return value;
+    return `'${value}'`;
   }
 
   if (schema instanceof z.ZodBoolean) {
