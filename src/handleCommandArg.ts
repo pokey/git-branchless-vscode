@@ -29,14 +29,14 @@ export default async function handleCommandArg<T extends ParamMap>(
   const ret: Partial<InferArgType<T>> = {};
 
   try {
-    for (const [key, { handleMissing, transform: transformer }] of toPairs(params)) {
+    for (const [key, { handleMissing, transform }] of toPairs(params)) {
       const parsedValue = parsed[key];
       ret[key as keyof T] =
         parsedValue == null
           ? await handleMissing()
-          : transformer == null
+          : transform == null
           ? parsedValue
-          : await transformer(parsedValue);
+          : await transform(parsedValue);
     }
   } catch (err) {
     if (err instanceof UserCanceledError) {

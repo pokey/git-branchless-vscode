@@ -1,11 +1,6 @@
 import { CommandDescription } from "../CommandDescription.types";
 import Git from "../Git";
-import processBranchParam from "../processBranchParam";
-import {
-  BranchParam,
-  CommitishParam,
-  WorkspaceFolderParam,
-} from "../paramHandlers";
+import { CommitishParam, WorkspaceFolderParam } from "../paramHandlers";
 
 const params = {
   destination: new CommitishParam("The commit to switch to"),
