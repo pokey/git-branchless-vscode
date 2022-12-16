@@ -19,6 +19,7 @@
     "onCommand:git-branchless.move.exact",
     "onCommand:git-branchless.move.source",
     "onCommand:git-branchless.smartlog",
+    "onCommand:git-branchless.smartlogRevset",
     "onCommand:git-branchless.hide",
     "onCommand:git-branchless.custom.autoBranch",
     "onCommand:git-branchless.custom.moveBranch",
@@ -39,6 +40,10 @@
       {
         "command": "git-branchless.smartlog",
         "title": "Git branchless: Smart log"
+      },
+      {
+        "command": "git-branchless.smartlogRevset",
+        "title": "Git branchless: Smart log specific commits"
       },
       {
         "command": "git-branchless.hide",
