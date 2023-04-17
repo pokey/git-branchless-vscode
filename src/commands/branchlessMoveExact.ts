@@ -1,6 +1,10 @@
-import { CommitishParam } from "../paramHandlers";
-import { RevsetParam } from "../paramHandlers";
+import { z } from "zod";
 import BranchlessCommand from "../BranchlessCommand";
+import {
+  CommitishParam,
+  DefaultValueParam,
+  RevsetParam,
+} from "../paramHandlers";
 
 const branchlessMoveExact = new BranchlessCommand(
   "move.exact",
@@ -17,6 +21,10 @@ const branchlessMoveExact = new BranchlessCommand(
         "A commit-ish to which the commit(s) will be moved"
       ),
       flag: "--dest",
+    },
+    merge: {
+      paramHandler: new DefaultValueParam(z.boolean(), false),
+      flag: "--merge",
     },
   },
   { logAfter: true }
