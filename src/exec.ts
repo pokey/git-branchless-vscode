@@ -13,19 +13,61 @@ import getOutputChannel from "./getOutputChannel";
  * @param options Options for spawning the process
  * @returns The output from the command
  */
-export default function exec(
+export async function exec(
   command: string,
   args: string[],
   options: cp.SpawnOptionsWithoutStdio
 ): Promise<string> {
-  return new Promise<string>((resolve, reject) => {
+  const { stdout, code } = await execSub(command, args, options);
+
+  if (code === 0) {
+    return stdout;
+  }
+
+  getOutputChannel().show(true);
+  throw Error(`Command ${command} failed with exit code ${code}`);
+}
+
+/**
+ * Runs a process using `spawn` and returns its output.  If there is any stderr
+ * output, it shows it in a VSCode output channel.  Throws an exception on
+ * nonzero exit code.
+ *
+ * Based on https://stackoverflow.com/a/32872753/
+ *
+ * @param command The command to run.
+ * @param args List of string arguments.
+ * @param options Options for spawning the process
+ * @returns The output from the command
+ */
+export async function execCheck(
+  command: string,
+  args: string[],
+  options: cp.SpawnOptionsWithoutStdio
+): Promise<boolean> {
+  const { code } = await execSub(command, args, options);
+
+  return code === 0;
+}
+
+interface ExecOutput {
+  stdout: string;
+  code: number | null;
+}
+
+function execSub(
+  command: string,
+  args: string[],
+  options: cp.SpawnOptionsWithoutStdio
+) {
+  return new Promise<ExecOutput>((resolve) => {
     const child = cp.spawn(command, args, options);
 
     let outputChannelPrepared = false;
 
-    var scriptOutput = "";
+    var stdout = "";
     child.stdout.setEncoding("utf8").on("data", (data) => {
-      scriptOutput += data.toString();
+      stdout += data.toString();
     });
 
     child.stderr.setEncoding("utf8").on("data", (data) => {
@@ -38,12 +80,7 @@ export default function exec(
     });
 
     child.on("close", function (code) {
-      if (code === 0) {
-        resolve(scriptOutput);
-      } else {
-        getOutputChannel().show(true);
-        reject(`Command ${command} failed with exit code ${code}`);
-      }
+      resolve({ stdout, code });
     });
   });
 }

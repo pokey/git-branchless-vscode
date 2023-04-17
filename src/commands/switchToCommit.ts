@@ -13,9 +13,15 @@ const switchToCommit: CommandDescription<typeof params> = {
   async run({ destination, workspaceFolder }) {
     const git = new Git(workspaceFolder);
 
-    const { hash } = await git.queryOne(destination);
+    const unwrappedDestination =
+      destination.startsWith('"') && destination.endsWith('"')
+        ? destination.slice(1, -1)
+        : destination;
+    const branchlessArg = (await git.isBranch(unwrappedDestination))
+      ? unwrappedDestination
+      : (await git.queryOne(destination)).hash;
 
-    await git.branchlessSwitch(hash);
+    await git.branchlessSwitch(branchlessArg);
   },
 };
 

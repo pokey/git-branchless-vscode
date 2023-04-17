@@ -1,7 +1,7 @@
 import { WorkspaceFolder } from "vscode";
 import { branchlessCmd } from "./branchlessCmd";
 import Commit from "./Commit";
-import exec from "./exec";
+import { exec } from "./exec";
 import { getCleanLines } from "./getCleanLines";
 import getCommitInfo from "./getCommitInfo";
 

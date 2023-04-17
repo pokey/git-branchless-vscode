@@ -1,6 +1,6 @@
 import { WorkspaceFolder } from "vscode";
 import { branchlessCmd, gitCmd } from "./branchlessCmd";
-import exec from "./exec";
+import { exec, execCheck } from "./exec";
 import getTerminal from "./getTerminal";
 import runBranchlessQuery from "./runBranchlessQuery";
 import showLog from "./showLog";
@@ -10,6 +10,12 @@ export default class Git {
 
   private runGitCmd(command: string, ...args: string[]) {
     return exec(gitCmd(), [command, ...args], {
+      cwd: this.workspaceFolder.uri.fsPath,
+    });
+  }
+
+  private runGitCmdCheck(command: string, ...args: string[]) {
+    return execCheck(gitCmd(), [command, ...args], {
       cwd: this.workspaceFolder.uri.fsPath,
     });
   }
@@ -30,6 +36,15 @@ export default class Git {
 
   config(...args: string[]) {
     return this.runGitCmd("config", ...args);
+  }
+
+  isBranch(name: string) {
+    return this.runGitCmdCheck(
+      "show-ref",
+      "--verify",
+      "--quiet",
+      `refs/heads/${name}`
+    );
   }
 
   query(query: string) {

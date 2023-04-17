@@ -1,7 +1,7 @@
 import { WorkspaceFolder } from "vscode";
 import { branchlessCmd } from "./branchlessCmd";
 import getTerminal from "./getTerminal";
-import exec from "./exec";
+import { exec } from "./exec";
 import getOutputChannel from "./getOutputChannel";
 
 export default async function showLog(workspaceFolder: WorkspaceFolder) {

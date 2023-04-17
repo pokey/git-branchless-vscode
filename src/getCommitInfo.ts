@@ -2,7 +2,7 @@ import { toPairs, zip } from "lodash";
 import { WorkspaceFolder } from "vscode";
 import { gitCmd } from "./branchlessCmd";
 import Commit, { CommitInfo } from "./Commit";
-import exec from "./exec";
+import { exec } from "./exec";
 import { getCleanLines } from "./getCleanLines";
 
 const fields: Record<keyof CommitInfo, string> = {
