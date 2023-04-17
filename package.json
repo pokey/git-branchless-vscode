@@ -21,6 +21,8 @@
     "onCommand:git-branchless.smartlog",
     "onCommand:git-branchless.smartlogRevset",
     "onCommand:git-branchless.hide",
+    "onCommand:git-branchless.submit",
+    "onCommand:git-branchless.submitRevset",
     "onCommand:git-branchless.custom.autoBranch",
     "onCommand:git-branchless.custom.moveBranch",
     "onCommand:git-branchless.custom.detachHead",
@@ -48,6 +50,14 @@
       {
         "command": "git-branchless.hide",
         "title": "Git branchless: Hide"
+      },
+      {
+        "command": "git-branchless.submit",
+        "title": "Git branchless: Submit via force push"
+      },
+      {
+        "command": "git-branchless.submitRevset",
+        "title": "Git branchless: Submit given revset via force push"
       },
       {
         "command": "git-branchless.custom.autoBranch",
