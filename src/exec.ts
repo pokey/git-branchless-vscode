@@ -29,9 +29,8 @@ export async function exec(
 }
 
 /**
- * Runs a process using `spawn` and returns its output.  If there is any stderr
- * output, it shows it in a VSCode output channel.  Throws an exception on
- * nonzero exit code.
+ * Runs a process using `spawn` and returns a boolean indicated whether it
+ * succeeded.
  *
  * Based on https://stackoverflow.com/a/32872753/
  *

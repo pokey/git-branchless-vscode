@@ -74,6 +74,10 @@
       {
         "command": "git-branchless.custom.switchToCommit",
         "title": "Git branchless: Checkout a commit"
+      },
+      {
+        "command": "git-branchless.custom.resetSoft",
+        "title": "Git branchless: Do a soft reset from a source commit onto a destination"
       }
     ],
     "configuration": {

@@ -38,6 +38,14 @@ export default class Git {
     return this.runGitCmd("config", ...args);
   }
 
+  checkout(...args: string[]) {
+    return this.runGitCmd("checkout", ...args);
+  }
+
+  reset(...args: string[]) {
+    return this.runGitCmd("reset", ...args);
+  }
+
   isBranch(name: string) {
     return this.runGitCmdCheck(
       "show-ref",
@@ -45,6 +53,10 @@ export default class Git {
       "--quiet",
       `refs/heads/${name}`
     );
+  }
+
+  isClean() {
+    return this.runGitCmdCheck("diff", "--quiet");
   }
 
   query(query: string) {
@@ -56,7 +68,7 @@ export default class Git {
 
     if (commits.length !== 1) {
       throw new Error(
-        `Must refer to a single commit; ${query} refers to ${commits.length} commits`
+        `Must refer to a single commit; '${query}' refers to ${commits.length} commits`
       );
     }
 
