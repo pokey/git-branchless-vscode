@@ -27,7 +27,7 @@
     "onCommand:git-branchless.custom.moveBranch",
     "onCommand:git-branchless.custom.detachHead",
     "onCommand:git-branchless.custom.switchToCommit",
-    "onCommand:git-branchless.custom.resetSoft"
+    "onCommand:git-branchless.custom.reset"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -77,8 +77,8 @@
         "title": "Git branchless: Checkout a commit"
       },
       {
-        "command": "git-branchless.custom.resetSoft",
-        "title": "Git branchless: Do a soft reset from a source commit onto a destination"
+        "command": "git-branchless.custom.reset",
+        "title": "Git branchless: Do a reset from a source commit onto a destination commit"
       }
     ],
     "configuration": {

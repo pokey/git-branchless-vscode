@@ -9,7 +9,7 @@ import branchlessSubmit from "./branchlessSubmit";
 import branchlessSubmitRevset from "./branchlessSubmitRevset";
 import detachHead from "./detachHead";
 import moveBranch from "./moveBranch";
-import resetSoft from "./resetSoft";
+import reset from "./reset";
 import switchToCommit from "./switchToCommit";
 
 export const commands: CommandDescription<any>[] = [
@@ -24,5 +24,5 @@ export const commands: CommandDescription<any>[] = [
   detachHead,
   branchlessHide,
   switchToCommit,
-  resetSoft,
+  reset,
 ];
