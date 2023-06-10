@@ -26,7 +26,8 @@
     "onCommand:git-branchless.custom.autoBranch",
     "onCommand:git-branchless.custom.moveBranch",
     "onCommand:git-branchless.custom.detachHead",
-    "onCommand:git-branchless.custom.switchToCommit"
+    "onCommand:git-branchless.custom.switchToCommit",
+    "onCommand:git-branchless.custom.resetSoft"
   ],
   "main": "./dist/extension.js",
   "contributes": {
