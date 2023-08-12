@@ -22,6 +22,10 @@ const branchlessMoveSource = new BranchlessCommand(
       paramHandler: new DefaultValueParam(z.boolean(), false),
       flag: "--merge",
     },
+    insert: {
+      paramHandler: new DefaultValueParam(z.boolean(), false),
+      flag: "--insert",
+    },
   },
   { logAfter: true }
 );

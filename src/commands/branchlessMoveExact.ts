@@ -26,6 +26,14 @@ const branchlessMoveExact = new BranchlessCommand(
       paramHandler: new DefaultValueParam(z.boolean(), false),
       flag: "--merge",
     },
+    fixup: {
+      paramHandler: new DefaultValueParam(z.boolean(), false),
+      flag: "--fixup",
+    },
+    insert: {
+      paramHandler: new DefaultValueParam(z.boolean(), false),
+      flag: "--insert",
+    },
   },
   { logAfter: true }
 );
