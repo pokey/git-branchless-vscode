@@ -4,11 +4,10 @@ import {
   InferArgType,
 } from "./BaseCommandDescription.types";
 import { GitCommandDescription } from "./CommandDescription.types";
-import Git from "./Git";
-import GitExecutor from "./GitExecutor";
 import { commands } from "./commands/commands";
 import handleCommandArg from "./handleCommandArg";
 import { WorkspaceFolderParam } from "./paramHandlers";
+import { getWorkspaceGit } from "./getWorkspaceGit";
 
 function registerCommand<T extends Record<string, any>>({
   id,
@@ -28,7 +27,10 @@ function registerCommand<T extends Record<string, any>>({
 
         return await run(arg);
       } catch (err) {
-        vscode.window.showErrorMessage((err as Error).message);
+        const error = err as Error;
+        if (error.name !== "SilentError") {
+          vscode.window.showErrorMessage(error.message);
+        }
         throw err;
       }
     }
@@ -47,9 +49,7 @@ function registerGitCommand<T extends Record<string, any>>({
       workspaceFolder: new WorkspaceFolderParam(),
     },
     async run({ workspaceFolder, ...rest }) {
-      const git = new Git(
-        new GitExecutor(workspaceFolder as vscode.WorkspaceFolder)
-      );
+      const git = getWorkspaceGit(workspaceFolder as vscode.WorkspaceFolder);
       return await run({ ...(rest as InferArgType<T>), git });
     },
   });
