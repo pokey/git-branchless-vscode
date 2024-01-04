@@ -45,13 +45,14 @@ export default class GitExecutor {
     }
 
     if (!(await this.executor.execCheck(branchlessCmd(), ["--version"]))) {
+      const HOW = "How?";
       window
         .showErrorMessage(
           "git-branchless not found. Please install git-branchless.",
-          "How?"
+          HOW
         )
         .then((result) => {
-          if (result === "How?") {
+          if (result === HOW) {
             env.openExternal(
               Uri.parse(
                 "https://github.com/arxanas/git-branchless#installation"
@@ -70,12 +71,13 @@ export default class GitExecutor {
 
   private async checkGitBranchlessInit() {
     if (!(await this.executor.execCheck("stat", [".git/branchless/config"]))) {
+      const RUN_IT_FOR_ME = "Run it for me";
       const result = await window.showErrorMessage(
         "git-branchless init must be run on the current repo.",
-        "Run it for me"
+        RUN_IT_FOR_ME
       );
 
-      if (result === "Run it for me") {
+      if (result === RUN_IT_FOR_ME) {
         this.terminal.runCommand(`${branchlessCmd()} init`, false);
       }
 
