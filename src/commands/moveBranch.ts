@@ -1,24 +1,16 @@
-import { CommandDescription } from "../CommandDescription.types";
-import Git from "../Git";
+import { GitCommandDescription } from "../CommandDescription.types";
+import { BranchParam, CommitishParam } from "../paramHandlers";
 import processBranchParam from "../processBranchParam";
-import {
-  BranchParam,
-  CommitishParam,
-  WorkspaceFolderParam,
-} from "../paramHandlers";
 
 const params = {
   branch: new BranchParam("The branch to move"),
   destination: new CommitishParam("The commit to move the branch to"),
-  workspaceFolder: new WorkspaceFolderParam(),
 };
 
-const moveBranch: CommandDescription<typeof params> = {
+const moveBranch: GitCommandDescription<typeof params> = {
   id: "custom.moveBranch",
   params,
-  async run({ branch: rawBranch, destination, workspaceFolder }) {
-    const git = new Git(workspaceFolder);
-
+  async run({ branch: rawBranch, destination, git }) {
     const branch = await processBranchParam(git, rawBranch);
 
     const { hash, isHead } = await git.queryOne(destination);

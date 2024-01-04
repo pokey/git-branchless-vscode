@@ -1,8 +1,6 @@
 import { toPairs, zip } from "lodash";
-import { WorkspaceFolder } from "vscode";
-import { gitCmd } from "./branchlessCmd";
 import Commit, { CommitInfo } from "./Commit";
-import { exec } from "./exec";
+import GitExecutor from "./GitExecutor";
 import { getCleanLines } from "./getCleanLines";
 
 const fields: Record<keyof CommitInfo, string> = {
@@ -14,8 +12,8 @@ const fields: Record<keyof CommitInfo, string> = {
 };
 
 export default async function getCommitInfo(
-  commits: string[],
-  workspaceFolder: WorkspaceFolder
+  executor: GitExecutor,
+  commits: string[]
 ): Promise<Commit[]> {
   // This case prevents us from passing empty list of commits to git, which
   // would cause it to report info about head commit, which is definitely not
@@ -28,12 +26,11 @@ export default async function getCommitInfo(
 
   const formatterString = fieldFormatters.join("%x00");
 
-  const output = await exec(
-    gitCmd(),
-    ["show", "--no-patch", `--format=${formatterString}`, ...commits],
-    {
-      cwd: workspaceFolder.uri.fsPath,
-    }
+  const output = await executor.runGitCmd(
+    "show",
+    "--no-patch",
+    `--format=${formatterString}`,
+    ...commits
   );
 
   return getCleanLines(output).map((line) => {

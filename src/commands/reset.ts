@@ -1,6 +1,5 @@
-import { CommandDescription } from "../CommandDescription.types";
-import Git from "../Git";
-import { CommitishParam, WorkspaceFolderParam } from "../paramHandlers";
+import { GitCommandDescription } from "../CommandDescription.types";
+import { CommitishParam } from "../paramHandlers";
 import ChoiceParam from "../paramHandlers/ChoiceParam";
 
 const params = {
@@ -11,15 +10,12 @@ const params = {
     "The destination commit-ish indicating the desired parent"
   ),
   type: new ChoiceParam("The type of reset", ["mixed", "soft", "hard"]),
-  workspaceFolder: new WorkspaceFolderParam(),
 };
 
-const reset: CommandDescription<typeof params> = {
+const reset: GitCommandDescription<typeof params> = {
   id: "custom.reset",
   params,
-  async run({ source, destination, type, workspaceFolder }) {
-    const git = new Git(workspaceFolder);
-
+  async run({ source, destination, type, git }) {
     if (!(await git.isClean())) {
       throw new Error("Working tree is not clean; please commit changes first");
     }

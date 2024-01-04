@@ -4,7 +4,7 @@ import {
   CommandParam,
   InferArgType,
   ParamMap,
-} from "./CommandDescription.types";
+} from "./BaseCommandDescription.types";
 import { UserCanceledError } from "./paramHandlers";
 import { parseOrDisplayError } from "./parseOrDisplayError";
 

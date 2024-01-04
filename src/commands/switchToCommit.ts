@@ -1,18 +1,14 @@
-import { CommandDescription } from "../CommandDescription.types";
-import Git from "../Git";
-import { CommitishParam, WorkspaceFolderParam } from "../paramHandlers";
+import { GitCommandDescription } from "../CommandDescription.types";
+import { CommitishParam } from "../paramHandlers";
 
 const params = {
   destination: new CommitishParam("The commit to switch to"),
-  workspaceFolder: new WorkspaceFolderParam(),
 };
 
-const switchToCommit: CommandDescription<typeof params> = {
+const switchToCommit: GitCommandDescription<typeof params> = {
   id: "custom.switchToCommit",
   params,
-  async run({ destination, workspaceFolder }) {
-    const git = new Git(workspaceFolder);
-
+  async run({ destination, git }) {
     const unwrappedDestination =
       destination.startsWith('"') && destination.endsWith('"')
         ? destination.slice(1, -1)

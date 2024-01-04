@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { z } from "zod";
-import { CommandParam } from "../CommandDescription.types";
+import { CommandParam } from "../BaseCommandDescription.types";
 import UserCanceledError from "./UserCanceledError";
 
 export default class ChoiceParam<T extends string> implements CommandParam<T> {

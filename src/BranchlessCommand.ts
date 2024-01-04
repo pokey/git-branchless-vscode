@@ -1,12 +1,8 @@
 import { mapValues, sortBy, toPairs } from "lodash";
 import { z } from "zod";
-import {
-  CommandDescription,
-  CommandParam,
-  InferArgType,
-} from "./CommandDescription.types";
-import getTerminal from "./getTerminal";
-import { WorkspaceFolderParam } from "./paramHandlers";
+import { CommandParam, InferArgType } from "./BaseCommandDescription.types";
+import { GitCommandDescription } from "./CommandDescription.types";
+import Git from "./Git";
 import { DefaultValueParam } from "./paramHandlers";
 
 interface BranchlessCommandParam<T> {
@@ -22,15 +18,14 @@ interface Options {
 
 interface CoreParams {
   noConfirmation: CommandParam<boolean>;
-  workspaceFolder: WorkspaceFolderParam;
 }
 type BranchlessParams = Record<string, CommandParam<any>>;
 
 type ParamType = CoreParams & BranchlessParams;
-type ArgType = InferArgType<ParamType>;
+type ArgType = InferArgType<ParamType> & { git: Git };
 
 export default class BranchlessCommand
-  implements CommandDescription<ParamType>
+  implements GitCommandDescription<ParamType>
 {
   public params: ParamType;
 
@@ -46,7 +41,6 @@ export default class BranchlessCommand
 
     const coreParams: CoreParams = {
       noConfirmation: new DefaultValueParam(z.boolean(), noConfirmation),
-      workspaceFolder: new WorkspaceFolderParam(),
     };
     const branchlessParamMap: BranchlessParams = mapValues(
       this.branchlessParams,
@@ -59,8 +53,7 @@ export default class BranchlessCommand
     };
   }
 
-  async run({ noConfirmation, workspaceFolder, ...commandArgs }: ArgType) {
-    const terminal = getTerminal(workspaceFolder);
+  run({ noConfirmation, git, ...commandArgs }: ArgType) {
     const { logAfter = false } = this.options;
 
     const commandArgString = sortBy(
@@ -70,12 +63,11 @@ export default class BranchlessCommand
       .map(([key, param]) => getArgString(param, commandArgs[key]))
       .join(" ");
 
-    const showLogCommand = logAfter ? " && git-branchless smartlog" : "";
-
-    await terminal.runCommand(
-      `git-branchless ${this.command} ${commandArgString}${showLogCommand}`,
-      !noConfirmation
-    );
+    return git.runBranchlessCmdInTerminalAdvanced(this.command, {
+      dangerousRawArgString: commandArgString,
+      noConfirmation,
+      logAfter,
+    });
   }
 }
 

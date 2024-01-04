@@ -1,4 +1,4 @@
-import { CommandDescription } from "../CommandDescription.types";
+import { GitCommandDescription } from "../CommandDescription.types";
 import autoBranch from "./autoBranch";
 import branchlessHide from "./branchlessHide";
 import branchlessMoveExact from "./branchlessMoveExact";
@@ -12,7 +12,7 @@ import moveBranch from "./moveBranch";
 import reset from "./reset";
 import switchToCommit from "./switchToCommit";
 
-export const commands: CommandDescription<any>[] = [
+export const commands: GitCommandDescription<any>[] = [
   branchlessMoveExact,
   branchlessMoveSource,
   branchlessSmartlog,

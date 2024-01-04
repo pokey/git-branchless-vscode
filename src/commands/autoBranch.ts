@@ -1,22 +1,18 @@
 import slugify from "slugify";
 import { workspace } from "vscode";
-import { CommandDescription } from "../CommandDescription.types";
-import Git from "../Git";
-import { RevsetParam, WorkspaceFolderParam } from "../paramHandlers";
+import { GitCommandDescription } from "../CommandDescription.types";
+import { RevsetParam } from "../paramHandlers";
 
 const params = {
   revset: new RevsetParam(
     "A revset specifying the commits to add branch names to"
   ),
-  workspaceFolder: new WorkspaceFolderParam(),
 };
 
-const autoBranch: CommandDescription<typeof params> = {
+const autoBranch: GitCommandDescription<typeof params> = {
   id: "custom.autoBranch",
   params,
-  async run({ revset, workspaceFolder }) {
-    const git = new Git(workspaceFolder);
-
+  async run({ revset, git }) {
     const prefix =
       workspace
         .getConfiguration("git-branchless")

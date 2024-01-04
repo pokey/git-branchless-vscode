@@ -1,16 +1,12 @@
-import { CommandDescription } from "../CommandDescription.types";
-import Git from "../Git";
-import { WorkspaceFolderParam } from "../paramHandlers";
+import { GitCommandDescription } from "../CommandDescription.types";
 
-const params = {
-  workspaceFolder: new WorkspaceFolderParam(),
-};
+const params = {};
 
-const detachHead: CommandDescription<typeof params> = {
+const detachHead: GitCommandDescription<typeof params> = {
   id: "custom.detachHead",
   params,
-  async run({ workspaceFolder }) {
-    await new Git(workspaceFolder).detachHead();
+  async run({ git }) {
+    await git.detachHead();
   },
 };
 

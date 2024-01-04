@@ -6,9 +6,9 @@
     {
       "type": "npm",
       "script": "esbuild",
-      "isBackground": true,
+      "problemMatcher": [],
       "presentation": {
-        "reveal": "never"
+        "reveal": "silent"
       },
       "group": {
         "kind": "build",

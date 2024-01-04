@@ -1,53 +1,32 @@
-import { WorkspaceFolder } from "vscode";
-import { branchlessCmd, gitCmd } from "./branchlessCmd";
-import { exec, execCheck } from "./exec";
-import getTerminal from "./getTerminal";
+import GitExecutor, { BranchlessCommandOpts } from "./GitExecutor";
+import getOutputChannel from "./getOutputChannel";
 import runBranchlessQuery from "./runBranchlessQuery";
-import showLog from "./showLog";
 
 export default class Git {
-  constructor(private workspaceFolder: WorkspaceFolder) {}
-
-  private runGitCmd(command: string, ...args: string[]) {
-    return exec(gitCmd(), [command, ...args], {
-      cwd: this.workspaceFolder.uri.fsPath,
-    });
-  }
-
-  private runGitCmdCheck(command: string, ...args: string[]) {
-    return execCheck(gitCmd(), [command, ...args], {
-      cwd: this.workspaceFolder.uri.fsPath,
-    });
-  }
-
-  private runBranchlessCmd(command: string, ...args: string[]) {
-    return exec(branchlessCmd(), [command, ...args], {
-      cwd: this.workspaceFolder.uri.fsPath,
-    });
-  }
+  constructor(private executor: GitExecutor) {}
 
   branch(...args: string[]) {
-    return this.runGitCmd("branch", ...args);
+    return this.executor.runGitCmd("branch", ...args);
   }
 
   switch(...args: string[]) {
-    return this.runGitCmd("switch", ...args);
+    return this.executor.runGitCmd("switch", ...args);
   }
 
   config(...args: string[]) {
-    return this.runGitCmd("config", ...args);
+    return this.executor.runGitCmd("config", ...args);
   }
 
   checkout(...args: string[]) {
-    return this.runGitCmd("checkout", ...args);
+    return this.executor.runGitCmd("checkout", ...args);
   }
 
   reset(...args: string[]) {
-    return this.runGitCmd("reset", ...args);
+    return this.executor.runGitCmd("reset", ...args);
   }
 
   isBranch(name: string) {
-    return this.runGitCmdCheck(
+    return this.executor.runGitCmdCheck(
       "show-ref",
       "--verify",
       "--quiet",
@@ -56,11 +35,11 @@ export default class Git {
   }
 
   isClean() {
-    return this.runGitCmdCheck("diff", "--quiet");
+    return this.executor.runGitCmdCheck("diff", "--quiet");
   }
 
   query(query: string) {
-    return runBranchlessQuery(query, this.workspaceFolder);
+    return runBranchlessQuery(this.executor, query);
   }
 
   async queryOne(query: string) {
@@ -76,18 +55,21 @@ export default class Git {
   }
 
   showLog() {
-    return showLog(this.workspaceFolder);
+    return this.executor.runBranchlessCmdInTerminal("smartlog");
+  }
+
+  async showLogInOutputChannel() {
+    const output = await this.executor.runBranchlessCmd("smartlog");
+    getOutputChannel().append(output);
+    getOutputChannel().show(true);
   }
 
   detachHead() {
-    return this.runGitCmd("checkout", "--detach", "head");
+    return this.executor.runGitCmd("checkout", "--detach", "head");
   }
 
-  async branchlessSwitch(destination: string) {
-    await getTerminal(this.workspaceFolder).runCommand(
-      `${branchlessCmd()} switch '${destination}'`,
-      false
-    );
+  branchlessSwitch(destination: string) {
+    return this.executor.runBranchlessCmdInTerminal("switch", destination);
   }
 
   async getCurrentBranch() {
@@ -96,5 +78,12 @@ export default class Git {
 
   async getMainBranch() {
     return (await this.config("branchless.core.mainBranch")).trim();
+  }
+
+  runBranchlessCmdInTerminalAdvanced(
+    command: string,
+    opts: BranchlessCommandOpts = {}
+  ) {
+    return this.executor.runBranchlessCmdInTerminalAdvanced(command, opts);
   }
 }

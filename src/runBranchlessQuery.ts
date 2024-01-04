@@ -1,19 +1,15 @@
-import { WorkspaceFolder } from "vscode";
-import { branchlessCmd } from "./branchlessCmd";
 import Commit from "./Commit";
-import { exec } from "./exec";
+import GitExecutor from "./GitExecutor";
 import { getCleanLines } from "./getCleanLines";
 import getCommitInfo from "./getCommitInfo";
 
 export default async function runBranchlessQuery(
-  revset: string,
-  workspaceFolder: WorkspaceFolder
+  executor: GitExecutor,
+  revset: string
 ): Promise<Commit[]> {
-  const output = await exec(branchlessCmd(), ["query", "-r", revset], {
-    cwd: workspaceFolder.uri.fsPath,
-  });
+  const commits = getCleanLines(
+    await executor.runBranchlessCmd("query", "-r", revset)
+  );
 
-  const commits = getCleanLines(output);
-
-  return await getCommitInfo(commits, workspaceFolder);
+  return await getCommitInfo(executor, commits);
 }
