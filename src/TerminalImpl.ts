@@ -22,7 +22,11 @@ export class TerminalImpl implements Terminal {
         name: "Git branchless",
         cwd: this.workspaceFolder.uri.fsPath,
       });
-      await sleep(1000);
+      // FIXME: This is a hack to wait for the terminal to be ready. If we don't
+      // do this, then the first command might happen before any init commands that
+      // the terminal needs to run, and these will actually come in as input to the
+      // first command!
+      await sleep(100);
     }
 
     this.terminal.sendText(command, !requireConfirmation);
