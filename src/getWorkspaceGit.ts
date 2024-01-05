@@ -30,7 +30,6 @@ function constructWorkspaceGit(workspaceFolder: vscode.WorkspaceFolder) {
   let terminal: Terminal = new TerminalImpl(workspaceFolder);
   let executor: Executor = new ExecutorImpl(workspaceFolder);
 
-  // Secret setting useful for generating test cases from real usage
   const logCallsPath = getLogCallsPath();
 
   if (logCallsPath != null) {

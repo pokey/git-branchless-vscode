@@ -53,7 +53,7 @@ function registerGitCommand<T extends Record<string, any>>({
     async run({ workspaceFolder, ...rest }) {
       const logCallsPath = getLogCallsPath();
       if (logCallsPath != null) {
-        logCall(logCallsPath, { name: "run", arg: rest });
+        logCall(logCallsPath, { name: "start", id, arg: rest });
       }
       const git = getWorkspaceGit(workspaceFolder as vscode.WorkspaceFolder);
       return await run({ ...(rest as InferArgType<T>), git });
