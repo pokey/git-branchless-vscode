@@ -1,5 +1,5 @@
 import Commit from "./Commit";
-import GitExecutor from "./GitExecutor";
+import { GitExecutor } from "./GitExecutor";
 import { getCleanLines } from "./getCleanLines";
 import getCommitInfo from "./getCommitInfo";
 

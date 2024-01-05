@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
-import Git from "./Git";
-import GitExecutor from "./GitExecutor";
 import { ExecutorImpl } from "./ExecutorImpl";
+import Git from "./Git";
+import { GitExecutorImpl } from "./GitExecutorImpl";
 import { TerminalImpl } from "./TerminalImpl";
 
 const gits: Record<string, Git> = {};
@@ -23,7 +23,7 @@ export function getWorkspaceGit(workspaceFolder: vscode.WorkspaceFolder) {
 
 function constructWorkspaceGit(workspaceFolder: vscode.WorkspaceFolder) {
   return new Git(
-    new GitExecutor(
+    new GitExecutorImpl(
       new TerminalImpl(workspaceFolder),
       new ExecutorImpl(workspaceFolder)
     )

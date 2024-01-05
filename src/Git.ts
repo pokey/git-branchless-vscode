@@ -1,4 +1,5 @@
-import GitExecutor, { BranchlessCommandOpts } from "./GitExecutor";
+import { GitExecutor } from "./GitExecutor";
+import { BranchlessCommandOpts } from "./GitExecutorImpl";
 import getOutputChannel from "./getOutputChannel";
 import runBranchlessQuery from "./runBranchlessQuery";
 

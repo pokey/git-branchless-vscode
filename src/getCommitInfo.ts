@@ -1,6 +1,6 @@
 import { toPairs, zip } from "lodash";
 import Commit, { CommitInfo } from "./Commit";
-import GitExecutor from "./GitExecutor";
+import { GitExecutor } from "./GitExecutor";
 import { getCleanLines } from "./getCleanLines";
 
 const fields: Record<keyof CommitInfo, string> = {
