@@ -136,7 +136,22 @@ async function prerequisitesSatisfied() {
   Sinon.assert.notCalled(executor.exec);
   Sinon.assert.calledOnceWithExactly(
     terminal.runCommand,
-    "git-branchless smartlog ",
+    "git-branchless smartlog",
+    false
+  );
+
+  // Check that it caches whether the prerequisites are satisfied
+  executor.execCheck.resetHistory();
+  terminal.runCommand.resetHistory();
+  executor.exec.resetHistory();
+
+  await branchlessSmartlog.run({ git, noConfirmation: true });
+
+  Sinon.assert.notCalled(executor.execCheck);
+  Sinon.assert.notCalled(executor.exec);
+  Sinon.assert.calledOnceWithExactly(
+    terminal.runCommand,
+    "git-branchless smartlog",
     false
   );
 }

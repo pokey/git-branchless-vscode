@@ -1,5 +1,4 @@
 import Git from "../Git";
-import { GitExecutor } from "../GitExecutor";
 import branchlessSmartlog from "./branchlessSmartlog";
 import Sinon = require("sinon");
 

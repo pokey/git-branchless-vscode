@@ -121,13 +121,14 @@ export class GitExecutorImpl implements GitExecutor {
   ) {
     await this.checkGitBranchless();
 
-    const argString =
+    let argString =
       args?.map((arg) => `'${arg}'`).join(" ") ?? dangerousRawArgString ?? "";
+    argString = argString === "" ? argString : ` ${argString}`;
 
     const showLogCommand = logAfter ? ` && ${branchlessCmd()} smartlog` : "";
 
     await this.terminal.runCommand(
-      `${branchlessCmd()} ${command} ${argString}${showLogCommand}`,
+      `${branchlessCmd()} ${command}${argString}${showLogCommand}`,
       !noConfirmation
     );
   }

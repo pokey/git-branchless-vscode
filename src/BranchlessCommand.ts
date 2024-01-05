@@ -11,6 +11,10 @@ interface BranchlessCommandParam<T> {
   isArg?: boolean;
 }
 
+export type InferBranchlessArgType<T> = {
+  [P in keyof T]?: T[P] extends BranchlessCommandParam<infer V> ? V : never;
+};
+
 interface Options {
   logAfter?: boolean;
   noConfirmation?: boolean;
@@ -61,6 +65,7 @@ export default class BranchlessCommand
       ([_key, { isArg }]) => (isArg ? 1 : 0)
     )
       .map(([key, param]) => getArgString(param, commandArgs[key]))
+      .filter((arg) => arg !== "")
       .join(" ");
 
     return git.runBranchlessCmdInTerminalAdvanced(this.command, {
