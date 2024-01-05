@@ -9,6 +9,7 @@
     "url": "https://github.com/pokey/git-branchless-vscode.git"
   },
   "version": "0.3.5",
+  "activationEvents": [],
   "engines": {
     "vscode": "^1.71.0"
   },
