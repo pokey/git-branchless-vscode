@@ -8,26 +8,12 @@
     "type": "git",
     "url": "https://github.com/pokey/git-branchless-vscode.git"
   },
-  "version": "0.3.3",
+  "version": "0.3.4",
   "engines": {
     "vscode": "^1.71.0"
   },
   "categories": [
     "Other"
-  ],
-  "activationEvents": [
-    "onCommand:git-branchless.move.exact",
-    "onCommand:git-branchless.move.source",
-    "onCommand:git-branchless.smartlog",
-    "onCommand:git-branchless.smartlogRevset",
-    "onCommand:git-branchless.hide",
-    "onCommand:git-branchless.submit",
-    "onCommand:git-branchless.submitRevset",
-    "onCommand:git-branchless.custom.autoBranch",
-    "onCommand:git-branchless.custom.moveBranch",
-    "onCommand:git-branchless.custom.detachHead",
-    "onCommand:git-branchless.custom.switchToCommit",
-    "onCommand:git-branchless.custom.reset"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -115,8 +101,8 @@
     "@types/node": "16.x",
     "@types/sinon": "^17.0.2",
     "@types/vscode": "^1.71.0",
-    "@typescript-eslint/eslint-plugin": "^5.38.1",
-    "@typescript-eslint/parser": "^5.38.1",
+    "@typescript-eslint/eslint-plugin": "^6.17.0",
+    "@typescript-eslint/parser": "^6.17.0",
     "@vscode/test-electron": "^2.1.5",
     "chai": "^5.0.0",
     "esbuild": "^0.15.10",
@@ -131,6 +117,7 @@
   },
   "dependencies": {
     "lodash": "^4.17.21",
+    "itertools": "^2.2.1",
     "slugify": "^1.6.5",
     "validator": "^13.7.0",
     "zod": "^3.19.1"

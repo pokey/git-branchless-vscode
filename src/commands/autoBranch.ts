@@ -1,23 +1,20 @@
 import slugify from "slugify";
-import { workspace } from "vscode";
+import { z } from "zod";
 import { GitCommandDescription } from "../CommandDescription.types";
 import { RevsetParam } from "../paramHandlers";
+import ConfigurationParam from "../paramHandlers/ConfigurationParam";
 
 const params = {
   revset: new RevsetParam(
     "A revset specifying the commits to add branch names to"
   ),
+  prefix: new ConfigurationParam(z.string(), "branchPrefix", ""),
 };
 
 const autoBranch: GitCommandDescription<typeof params> = {
   id: "custom.autoBranch",
   params,
-  async run({ revset, git }) {
-    const prefix =
-      workspace
-        .getConfiguration("git-branchless")
-        .get<string>("branchPrefix") ?? "";
-
+  async run({ revset, git, prefix }) {
     const commits = await git.query(`(${revset}) - branches()`);
 
     for (const { hash, subject, isHead } of commits) {

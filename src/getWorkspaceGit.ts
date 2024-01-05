@@ -3,6 +3,10 @@ import { ExecutorImpl } from "./ExecutorImpl";
 import Git from "./Git";
 import { GitExecutorImpl } from "./GitExecutorImpl";
 import { TerminalImpl } from "./TerminalImpl";
+import { SpyExecutor } from "./SpyExecutor";
+import { Executor } from "./Executor";
+import { Terminal } from "./Terminal";
+import { SpyTerminal } from "./SpyTerminal";
 
 const gits: Record<string, Git> = {};
 
@@ -22,10 +26,18 @@ export function getWorkspaceGit(workspaceFolder: vscode.WorkspaceFolder) {
 }
 
 function constructWorkspaceGit(workspaceFolder: vscode.WorkspaceFolder) {
-  return new Git(
-    new GitExecutorImpl(
-      new TerminalImpl(workspaceFolder),
-      new ExecutorImpl(workspaceFolder)
-    )
-  );
+  let terminal: Terminal = new TerminalImpl(workspaceFolder);
+  let executor: Executor = new ExecutorImpl(workspaceFolder);
+
+  // Secret setting useful for generating test cases from real usage
+  const logCallsToPath = vscode.workspace
+    .getConfiguration("git-branchless")
+    .get<string>("logCallsToPath");
+
+  if (logCallsToPath != null) {
+    terminal = new SpyTerminal(terminal, logCallsToPath);
+    executor = new SpyExecutor(executor, logCallsToPath);
+  }
+
+  return new Git(new GitExecutorImpl(terminal, executor));
 }
