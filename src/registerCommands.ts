@@ -8,6 +8,8 @@ import { commands } from "./commands/commands";
 import handleCommandArg from "./handleCommandArg";
 import { WorkspaceFolderParam } from "./paramHandlers";
 import { getWorkspaceGit } from "./getWorkspaceGit";
+import { getLogCallsPath } from "./getLogCallsPath";
+import { logCall } from "./logCall";
 
 function registerCommand<T extends Record<string, any>>({
   id,
@@ -49,6 +51,10 @@ function registerGitCommand<T extends Record<string, any>>({
       workspaceFolder: new WorkspaceFolderParam(),
     },
     async run({ workspaceFolder, ...rest }) {
+      const logCallsPath = getLogCallsPath();
+      if (logCallsPath != null) {
+        logCall(logCallsPath, { name: "run", arg: rest });
+      }
       const git = getWorkspaceGit(workspaceFolder as vscode.WorkspaceFolder);
       return await run({ ...(rest as InferArgType<T>), git });
     },

@@ -7,6 +7,7 @@ import { SpyExecutor } from "./SpyExecutor";
 import { Executor } from "./Executor";
 import { Terminal } from "./Terminal";
 import { SpyTerminal } from "./SpyTerminal";
+import { getLogCallsPath } from "./getLogCallsPath";
 
 const gits: Record<string, Git> = {};
 
@@ -30,13 +31,11 @@ function constructWorkspaceGit(workspaceFolder: vscode.WorkspaceFolder) {
   let executor: Executor = new ExecutorImpl(workspaceFolder);
 
   // Secret setting useful for generating test cases from real usage
-  const logCallsToPath = vscode.workspace
-    .getConfiguration("git-branchless")
-    .get<string>("logCallsToPath");
+  const logCallsPath = getLogCallsPath();
 
-  if (logCallsToPath != null) {
-    terminal = new SpyTerminal(terminal, logCallsToPath);
-    executor = new SpyExecutor(executor, logCallsToPath);
+  if (logCallsPath != null) {
+    terminal = new SpyTerminal(terminal, logCallsPath);
+    executor = new SpyExecutor(executor, logCallsPath);
   }
 
   return new Git(new GitExecutorImpl(terminal, executor));
