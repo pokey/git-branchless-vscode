@@ -89,12 +89,12 @@ export class GitExecutorImpl implements GitExecutor {
   }
 
   async runGitCmd(command: string, ...args: string[]) {
-    await this.checkGit();
+    await this.checkGitBranchless();
     return await this.executor.exec(gitCmd(), [command, ...args]);
   }
 
   async runGitCmdCheck(command: string, ...args: string[]) {
-    await this.checkGit();
+    await this.checkGitBranchless();
     return await this.executor.execCheck(gitCmd(), [command, ...args]);
   }
 
