@@ -16,6 +16,10 @@ suite("detachHead", () => {
           args: ["git", ["checkout", "--detach", "head"]],
           result: "",
         },
+        {
+          name: "Terminal.runCommand",
+          args: ["git-branchless smartlog", false],
+        },
       ]
     )
   );

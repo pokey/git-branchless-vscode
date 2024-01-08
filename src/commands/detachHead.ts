@@ -7,6 +7,7 @@ const detachHead: GitCommandDescription<typeof params> = {
   params,
   async run({ git }) {
     await git.detachHead();
+    await git.showLog();
   },
 };
 
