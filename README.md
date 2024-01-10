@@ -2,6 +2,10 @@
 
 Unofficial VSCode extension for [`git-branchless`](https://github.com/arxanas/git-branchless/).
 
+## Installation
+
+Should work out of the box once you've [installed `git-branchless`](https://github.com/arxanas/git-branchless#installation), but if you want to use the voice commands, you'll need to [install them](https://github.com/pokey/git_branchless_talon#installation).
+
 ## Features
 
 ### Commands
