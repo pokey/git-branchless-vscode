@@ -6,9 +6,9 @@ const branchlessHide = new BranchlessCommand(
   "hide",
   "hide",
   {
-    deleteBranches: {
-      paramHandler: new DefaultValueParam(z.boolean(), true),
-      flag: "--delete-branches",
+    noDeleteBranches: {
+      paramHandler: new DefaultValueParam(z.boolean(), false),
+      flag: "--no-delete-branches",
     },
     revset: {
       paramHandler: new RevsetParam(
