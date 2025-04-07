@@ -81,5 +81,8 @@ function execSub(
     child.on("close", function (code) {
       resolve({ stdout, code });
     });
+    child.on("error", function (err) {
+      resolve({ stdout, code: null });
+    });
   });
 }
