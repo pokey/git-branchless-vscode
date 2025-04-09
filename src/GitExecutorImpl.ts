@@ -71,7 +71,16 @@ export class GitExecutorImpl implements GitExecutor {
   }
 
   private async checkGitBranchlessInit() {
-    if (!(await this.executor.execCheck("stat", [".git/branchless/config"]))) {
+    // Try to detect if the branchless config exists by asking git directly where the config is
+    // This works for both regular repos and worktrees
+    const gitDirCmd = await this.executor.exec(gitCmd(), [
+      "rev-parse",
+      "--git-common-dir",
+    ]);
+    const gitDir = gitDirCmd.trim();
+    const branchlessConfigPath = `${gitDir}/branchless/config`;
+
+    if (!(await this.executor.execCheck("stat", [branchlessConfigPath]))) {
       const RUN_IT_FOR_ME = "Run it for me";
       window
         .showErrorMessage(
