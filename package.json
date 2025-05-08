@@ -66,6 +66,10 @@
       {
         "command": "git-branchless.custom.reset",
         "title": "Git branchless: Do a reset from a source commit onto a destination commit"
+      },
+      {
+        "command": "git-branchless.custom.getCommitMessage",
+        "title": "Git branchless: Get commit message"
       }
     ],
     "configuration": {

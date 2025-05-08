@@ -1,3 +1,4 @@
+import Commit from "./Commit";
 import { GitExecutor } from "./GitExecutor";
 import { BranchlessCommandOpts } from "./GitExecutorImpl";
 import getOutputChannel from "./getOutputChannel";
@@ -79,6 +80,12 @@ export default class Git {
 
   async getMainBranch() {
     return (await this.config("branchless.core.mainBranch")).trim();
+  }
+
+  async getCommitMessage(commit: Commit) {
+    return (
+      await this.executor.runGitCmd("log", "-1", "--pretty=%B", commit.hash)
+    ).trim();
   }
 
   runBranchlessCmdInTerminalAdvanced(

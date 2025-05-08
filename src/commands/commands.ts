@@ -8,6 +8,7 @@ import branchlessSmartlogRevset from "./branchlessSmartlogRevset";
 import branchlessSubmit from "./branchlessSubmit";
 import branchlessSubmitRevset from "./branchlessSubmitRevset";
 import detachHead from "./detachHead";
+import getCommitMessage from "./getCommitMessage";
 import moveBranch from "./moveBranch";
 import reset from "./reset";
 import switchToCommit from "./switchToCommit";
@@ -25,4 +26,5 @@ export const commands: GitCommandDescription<any>[] = [
   branchlessHide,
   switchToCommit,
   reset,
+  getCommitMessage,
 ];
