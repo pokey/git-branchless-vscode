@@ -13,6 +13,11 @@ suite("switchToCommit", () => {
       },
       [
         {
+          name: "Executor.exec",
+          args: ["git", ["rev-parse", "--git-common-dir"]],
+          result: ".git\n",
+        },
+        {
           name: "Executor.execCheck",
           args: [
             "git",
@@ -38,6 +43,11 @@ suite("switchToCommit", () => {
         });
       },
       [
+        {
+          name: "Executor.exec",
+          args: ["git", ["rev-parse", "--git-common-dir"]],
+          result: ".git\n",
+        },
         {
           name: "Executor.execCheck",
           args: [

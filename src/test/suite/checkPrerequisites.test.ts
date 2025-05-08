@@ -94,7 +94,7 @@ async function noGitBranchlessInit() {
     runCommand: Sinon.fake(),
   };
   const executor = {
-    exec: Sinon.fake(),
+    exec: Sinon.fake.resolves(".git"),
     execCheck: Sinon.stub()
       .onFirstCall()
       .resolves(true)
@@ -116,7 +116,7 @@ async function noGitBranchlessInit() {
   Sinon.assert.calledWithExactly(executor.execCheck.getCalls()[3], "stat", [
     ".git/branchless/config",
   ]);
-  Sinon.assert.notCalled(executor.exec);
+  Sinon.assert.calledOnce(executor.exec);
   Sinon.assert.notCalled(terminal.runCommand);
 }
 
@@ -125,7 +125,7 @@ async function prerequisitesSatisfied() {
     runCommand: Sinon.fake(),
   };
   const executor = {
-    exec: Sinon.fake(),
+    exec: Sinon.fake.resolves(".git"),
     execCheck: Sinon.fake.resolves(true),
   };
   const git = new Git(new GitExecutorImpl(terminal, executor));
@@ -133,7 +133,7 @@ async function prerequisitesSatisfied() {
   await branchlessSmartlog.run({ git, noConfirmation: true });
 
   Sinon.assert.callCount(executor.execCheck, 4);
-  Sinon.assert.notCalled(executor.exec);
+  Sinon.assert.calledOnce(executor.exec);
   Sinon.assert.calledOnceWithExactly(
     terminal.runCommand,
     "git-branchless smartlog",

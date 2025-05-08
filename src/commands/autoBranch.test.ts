@@ -11,6 +11,11 @@ suite("autoBranch", () => {
       [
         {
           name: "Executor.exec",
+          args: ["git", ["rev-parse", "--git-common-dir"]],
+          result: ".git\n",
+        },
+        {
+          name: "Executor.exec",
           args: ["git-branchless", ["query", "-r", "(stack(.)) - branches()"]],
           result:
             "74833c30bff7708dea03085cd16d132b982296b8\nea6cdcaadbe2f3a3160417b1415fc421123fde41\n",

@@ -11,6 +11,11 @@ suite("moveBranch", () => {
       [
         {
           name: "Executor.exec",
+          args: ["git", ["rev-parse", "--git-common-dir"]],
+          result: ".git\n",
+        },
+        {
+          name: "Executor.exec",
           args: ["git-branchless", ["query", "-r", "."]],
           result: "e6b242c566f9917a5da9b8421743e86840065c22\n",
         },

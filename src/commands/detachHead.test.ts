@@ -13,6 +13,11 @@ suite("detachHead", () => {
       [
         {
           name: "Executor.exec",
+          args: ["git", ["rev-parse", "--git-common-dir"]],
+          result: ".git\n",
+        },
+        {
+          name: "Executor.exec",
           args: ["git", ["checkout", "--detach", "head"]],
           result: "",
         },

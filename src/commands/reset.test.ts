@@ -15,6 +15,11 @@ suite("reset", () => {
       },
       [
         {
+          name: "Executor.exec",
+          args: ["git", ["rev-parse", "--git-common-dir"]],
+          result: ".git\n",
+        },
+        {
           name: "Executor.execCheck",
           args: ["git", ["diff", "--quiet"]],
           result: true,

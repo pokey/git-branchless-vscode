@@ -12,9 +12,15 @@ export function branchlessCommandTest(
       runCommand: Sinon.fake(),
     };
     const executor = {
-      exec: Sinon.fake(),
+      exec: Sinon.stub(),
       execCheck: Sinon.fake.resolves(true),
     };
+
+    // Mock the git-common-dir response
+    executor.exec
+      .withArgs("git", ["rev-parse", "--git-common-dir"])
+      .resolves(".git\n");
+
     const git = new Git(new GitExecutorImpl(terminal, executor));
 
     await run(git);
